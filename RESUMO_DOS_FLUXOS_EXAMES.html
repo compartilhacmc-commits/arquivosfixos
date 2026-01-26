@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diretoria de Regulação/CEAPS/CMC Resumo dos Fluxos de Exames</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .header {
+            background: #9C4A6F;
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .header.hidden {
+            transform: translateY(-100%);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .header-info {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            text-align: right;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #9C4A6F;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(156, 74, 111, 0.1);
+        }
+
+        .search-button, .clear-button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .search-button {
+            background: #9C4A6F;
+            color: white;
+        }
+
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(156, 74, 111, 0.3);
+        }
+
+        .clear-button {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 2px solid #e9ecef;
+        }
+
+        .clear-button:hover {
+            background: #e9ecef;
+            border-color: #dee2e6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .content-section {
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header {
+            background: #9C4A6F;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-header i {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .section-content {
+            padding: 30px;
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 0;
+            line-height: 1.8;
+        }
+
+        .subsection-title {
+            color: #495057;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .sub-subsection-title {
+            color: #495057;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin: 20px 0 10px 0;
+        }
+
+        .demand-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .demand-box {
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid;
+        }
+
+        .high-demand {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left-color: #2196f3;
+        }
+
+        .low-demand {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-left-color: #9c27b0;
+        }
+
+        .demand-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .demand-text {
+            color: #6c757d;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .highlight-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #9C4A6F;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(156, 74, 111, 0.1);
+            transition: all 0.3s ease;
+            margin: 15px 0;
+        }
+
+        .highlight-link:hover {
+            background: rgba(156, 74, 111, 0.2);
+            transform: translateX(5px);
+        }
+
+        .highlight-link i {
+            font-size: 0.9rem;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 1px solid #ffcc02;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #ff9800;
+        }
+
+        .info-box h4 {
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .info-box p {
+            color: #bf360c;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .info-box ul {
+            margin: 10px 0 10px 20px;
+            color: #bf360c;
+        }
+
+        .info-box ul li {
+            margin: 5px 0;
+        }
+
+        .info-box ol {
+            margin: 10px 0 10px 20px;
+            color: #bf360c;
+        }
+
+        .info-box ol li {
+            margin: 5px 0;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 1px solid #81c784;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #4caf50;
+        }
+
+        .success-box h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .success-box p {
+            color: #1b5e20;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .success-box ul {
+            margin: 10px 0 10px 20px;
+            color: #1b5e20;
+        }
+
+        .success-box ul li {
+            margin: 5px 0;
+        }
+
+        .alert-box {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border: 1px solid #ef9a9a;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #f44336;
+        }
+
+        .alert-box h4 {
+            color: #c62828;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .alert-box p {
+            color: #b71c1c;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .alert-box ul {
+            margin: 10px 0 10px 20px;
+            color: #b71c1c;
+        }
+
+        .alert-box ul li {
+            margin: 5px 0;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #4caf50;
+        }
+
+        .contact-info strong {
+            color: #2e7d32;
+        }
+
+        .contact-info p {
+            margin: 5px 0;
+            color: #1b5e20;
+        }
+
+        .step-list {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .step-list ol {
+            margin-left: 20px;
+            color: #495057;
+        }
+
+        .step-list ol li {
+            margin: 10px 0;
+            line-height: 1.7;
+        }
+
+        .step-list ol li strong {
+            color: #9C4A6F;
+        }
+
+        .step-list ol li ul {
+            margin-top: 10px;
+        }
+
+        .specialty-list {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .specialty-list ul {
+            columns: 2;
+            -webkit-columns: 2;
+            -moz-columns: 2;
+            column-gap: 20px;
+            margin: 10px 0;
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .specialty-list ul li {
+            margin: 8px 0;
+            color: #1565c0;
+            font-weight: 500;
+            break-inside: avoid;
+        }
+
+        .specialty-list p {
+            margin: 10px 0;
+            color: #1565c0;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .footer {
+            background: #9C4A6F;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .footer i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #81c784;
+        }
+
+        .footer p {
+            margin: 8px 0;
+            opacity: 0.9;
+        }
+
+        mark {
+            background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .header-right {
+                align-items: center;
+            }
+
+            .header-title {
+                font-size: 1.4rem;
+            }
+
+            .demand-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .container {
+                margin-top: 20px;
+                padding: 15px;
+            }
+
+            .section-content {
+                padding: 20px;
+            }
+
+            .specialty-list ul {
+                columns: 1;
+                -webkit-columns: 1;
+                -moz-columns: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 1.2rem;
+            }
+
+            .search-input, .search-button, .clear-button {
+                padding: 10px 15px;
+            }
+
+            .container {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header" id="header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="header-title">Diretoria de Regulação/CEAPS - Resumo dos Fluxos</h1>
+                <p class="header-subtitle">Sistema de Agendamento e Procedimentos</p>
+            </div>
+            <div class="header-right">
+                <div class="header-info">
+                    <div>Página criada por Ana P. A. Silva Matr.201704</div>
+                    <div>Assistente /Administrativo/CEAPS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Pesquisar na página...">
+            <button id="searchButton" class="search-button">
+                <i class="fas fa-search"></i> Pesquisar
+            </button>
+            <button id="clearSearchButton" class="clear-button">
+                <i class="fas fa-times"></i> Limpar
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content-section">
+            <div class="section-header">
+                <i class="fas fa-info-circle"></i>
+                <h2 class="section-title">Resumo dos Fluxos de Marcação de Consultas e Exames</h2>
+            </div>
+            <div class="section-content">
+                <p class="intro-text">Este documento apresenta o resumo dos fluxos para marcação de consultas especializadas e exames, organizando os procedimentos por demanda e especificando os canais apropriados para cada tipo de serviço.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <i class="fas fa-vial"></i>
+                <h2 class="section-title">Exames</h2>
+            </div>
+            <div class="section-content">
+                <a href="https://portal.contagem.mg.gov.br/media-e-alta-complexidade" class="highlight-link" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    Fluxos Diversos - Acessar Notas Técnicas
+                </a>
+
+                <h3 class="subsection-title">Exames de Imagem</h3>
+                <p style="color: #6c757d; line-height: 1.8;">Para exames de imagem (ultrassom, raio-X, tomografia, ressonância), a solicitação deve ser inserida no sistema Vivver com justificativa médica.</p>
+
+                <div class="info-box" style="margin-top: 20px;">
+                    <h4><i class="fas fa-exclamation-circle"></i> Importante</h4>
+                    <p>Todos os exames de alta complexidade devem passar por regulação médica antes do agendamento.</p>
+                    <p>Verificar sempre se a guia está corretamente lançada no sistema antes de enviar para a central.</p>
+                </div>
+
+                <h3 class="subsection-title">Exames Laboratoriais</h3>
+                <p style="color: #6c757d; line-height: 1.8;">Os exames laboratoriais de rotina podem ser agendados diretamente pela unidade básica de saúde. Exames especializados devem ser regulados.</p>
+
+                <h3 class="subsection-title">Procedimentos Especiais</h3>
+                <p style="color: #6c757d; line-height: 1.8;">Procedimentos como endoscopia, colonoscopia e outros exames invasivos requerem regulação médica obrigatória.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <i class="fas fa-procedures"></i>
+                <h2 class="section-title">Fluxos Específicos</h2>
+            </div>
+            <div class="section-content">
+                <h3 class="subsection-title">Pré-natal de Alto Risco</h3>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>O profissional de nível superior deverá inserir a solicitação com a justificativa no sistema Vivver.</li>
+                    <li>A guia deverá ser arquivada na unidade de saúde para monitoramento até o agendamento.</li>
+                    <li>A unidade básica de saúde será responsável por monitorar o status da solicitação no sistema, garantindo que não fique pendente por mais de 30 dias.</li>
+                    <li>Caso a solicitação permaneça pendente por mais de 30 dias, a unidade deverá entrar em contato com a Central de Marcação de Consultas para verificar o status.</li>
+                </ul>
+
+                <h3 class="subsection-title">Mamografia</h3>
+                <p style="color: #6c757d; line-height: 1.8; margin-bottom: 15px;">Mamografia deve seguir critérios nacionais atualizados (2025).</p>
+                
+                <div class="success-box">
+                    <p>✔ Solicitação é via SISCAN e deve indicar o prestador correto.</p>
+                    <p>✔ UBS agenda rastreamento diretamente; casos de risco elevado e diagnósticos são regulados.</p>
+                    <p>✔ Conduta pós-exame segue classificação BI-RADS.</p>
+                    <p>✔ Preenchimento correto e completo é obrigatório para evitar devoluções e erros de classificação.</p>
+                </div>
+
+                <h4 class="sub-subsection-title">Mamografia bilateral para rastreamento (código 0204030188)</h4>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li><strong>40 a 49 anos:</strong> acesso garantido, mesmo sem sintomas; decisão compartilhada com profissional; intervalo mínimo a cada 2 anos.</li>
+                    <li><strong>50 a 74 anos:</strong> rastreamento populacional a cada 2 anos.</li>
+                    <li><strong>Acima de 74 anos:</strong> decisão individualizada com profissional.</li>
+                    <li><strong>Pessoas com histórico de câncer de mama:</strong> realizar anualmente.</li>
+                    <li>Aplica-se a mulheres, homens trans e pessoas não-binárias com mamas.</li>
+                </ul>
+
+                <h4 class="sub-subsection-title">Mamografia rastreamento – população de risco elevado (código 9900000352)</h4>
+                <p style="color: #6c757d; line-height: 1.8;">Indicação para mulheres acima de 35 anos com:</p>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Histórico familiar de câncer de mama em parente de 1º grau</li>
+                    <li>Histórico pessoal de câncer de ovário/colo</li>
+                </ul>
+
+                <h4 class="sub-subsection-title">Mamografia diagnóstica (código 9900000354)</h4>
+                <p style="color: #6c757d; line-height: 1.8;">Indicada em casos suspeitos como:</p>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Nódulo mamário endurecido, fixo, crescente</li>
+                    <li>Descarga papilar sanguinolenta unilateral</li>
+                    <li>Pele em casca de laranja, retrações</li>
+                    <li>Linfonodos axilares endurecidos</li>
+                    <li>Aumento da mama com edema</li>
+                    <li>Alterações de mamilo</li>
+                    <li>Tumoração palpável em homens (sempre diagnóstica)</li>
+                    <li>Mastite que não melhora após antibiótico adequado</li>
+                </ul>
+
+                <a href="https://portal.contagem.mg.gov.br/imgeditor/file/Regula%C3%A7%C3%A3o/Nota%20tecnica%20conjunta/NT%20CONJ%2001%20-%202017%20-%20Mamografia(2).pdf" class="highlight-link" target="_blank">
+                    <i class="fas fa-file-pdf"></i>
+                    Acessar NT Mamografia
+                </a>
+
+                <h3 class="subsection-title">Acupuntura</h3>
+                
+                <h4 class="sub-subsection-title">Fluxo</h4>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Profissional de nível superior solicita acupuntura no sistema Vivver.</li>
+                    <li>Preenche justificativa + diagnóstico + histórico de tratamentos.</li>
+                    <li>Solicitação vai para regulação.</li>
+                    <li>Acompanhar as pendências via sistema. Se houver pendências → UBS corrige.</li>
+                    <li>Quando regulada → aguarda vaga conforme agenda do distrito.</li>
+                    <li>Ao agendar UBS recebe e entrega ao usuário o protocolo de agendamento.</li>
+                    <li>Atendimento ocorre no serviço contratado.</li>
+                    <li>Contrarreferência registrada no Vivver.</li>
+                </ul>
+
+                <h4 class="sub-subsection-title">Como solicitar no Sistema Vivver</h4>
+                <div class="step-list">
+                    <ol>
+                        <li>Acessar "Solicitação de Procedimento de Serviço".</li>
+                        <li>Selecionar o Tipo de Serviço: <strong>ACUPUNTURA</strong>.</li>
+                        <li>Escolher o procedimento correto conforme o Distrito onde o usuário será atendido.</li>
+                        <li>Preencher todos os campos obrigatórios, principalmente:
+                            <ul style="margin-top: 10px;">
+                                <li>Diagnóstico</li>
+                                <li>Motivo da indicação</li>
+                                <li>Tratamentos anteriores, inclusive acupuntura</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="alert-box" style="margin-top: 20px;">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Importante</h4>
+                    <p>Sem justificativa adequada → a solicitação entra como PENDÊNCIA, fica bloqueada para agendamento e a UBS deve corrigir.</p>
+                </div>
+
+                <h3 class="subsection-title">Infertilidade Conjugal</h3>
+                <p style="color: #6c757d; line-height: 1.8;">Considera-se infertilidade a ausência de gravidez após 1 ano de relações frequentes sem contracepção, para mulheres até 35 anos.</p>
+                
+                <div class="info-box" style="margin-top: 15px;">
+                    <h4><i class="fas fa-info-circle"></i> A investigação deve começar antes de 1 ano nos casos de:</h4>
+                    <ul>
+                        <li>Mulheres > 35 anos</li>
+                        <li>Ciclos menstruais irregulares</li>
+                        <li>História de DIP</li>
+                        <li>Suspeita/diagnóstico de endometriose</li>
+                        <li>Cirurgias abdominais prévias</li>
+                        <li>Homem com infertilidade conhecida</li>
+                    </ul>
+                </div>
+
+                <h4 class="sub-subsection-title">Avaliação Inicial na UBS</h4>
+                <p style="color: #6c757d; line-height: 1.8;">A UBS deve realizar a investigação básica do casal, incluindo:</p>
+
+                <p style="color: #495057; font-weight: 600; margin: 15px 0 10px 0;">Avaliação da mulher - Anamnese detalhada:</p>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Idade, tempo de infertilidade, tipo (primária/secundária)</li>
+                    <li>História menstrual, obstétrica, sexual e contraceptiva</li>
+                    <li>Frequência de relações (ideal: 2–3 vezes/semana)</li>
+                    <li>Comorbidades e uso de medicamentos</li>
+                    <li>Cirurgias prévias</li>
+                    <li>Tabagismo, álcool, drogas</li>
+                </ul>
+
+                <p style="color: #495057; font-weight: 600; margin: 15px 0 10px 0;">Exame físico:</p>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>IMC obrigatório</li>
+                    <li>Pesquisa de sinais inflamatórios, vulvovaginites, DIP, virilização</li>
+                    <li>Exame pélvico em todas as pacientes</li>
+                </ul>
+
+                <p style="color: #495057; font-weight: 600; margin: 15px 0 10px 0;">Avaliação do parceiro - Deve incluir:</p>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Desenvolvimento puberal</li>
+                    <li>Disfunção sexual</li>
+                    <li>ISTs e infecções geniturinárias</li>
+                    <li>Histórico de caxumba, varicocele, torções, traumas ou cirurgias</li>
+                    <li>Uso de anabolizantes/hormônios</li>
+                    <li>Tabagismo, álcool, drogas</li>
+                    <li>Presença de filhos anteriores</li>
+                </ul>
+
+                <h4 class="sub-subsection-title">Propedêutica Básica (exames obrigatórios)</h4>
+                <div class="success-box">
+                    <h4>Para o casal:</h4>
+                    <ul>
+                        <li>Exame ginecológico com citopatológico atualizado</li>
+                        <li>Espermograma (se alterado → encaminhar para Urologia)</li>
+                        <li>Ultrassonografia transvaginal</li>
+                        <li>Hormônios: FSH e LH (todas > 35 anos), Prolactina, TSH (coletar no 3º dia do ciclo)</li>
+                        <li>Exames laboratoriais: toxoplasmose, rubéola, CMV, HIV, HBsAg, anti-HCV, HTLV, VDRL</li>
+                    </ul>
+                </div>
+
+                <h4 class="sub-subsection-title">Situações não elegíveis ao serviço</h4>
+                <div class="alert-box">
+                    <ul>
+                        <li>Mulheres > 45 anos</li>
+                        <li>Mais de 3 cesarianas</li>
+                        <li>Comorbidades graves (diabetes descompensado, cardiopatia moderada/severa, doenças renais/hepáticas, neoplasias avançadas, lúpus descompensado etc.)</li>
+                        <li>Aids/HIV descompensado</li>
+                        <li>Distúrbios psiquiátricos graves que impeçam cuidado da criança</li>
+                        <li>Instabilidade conjugal ou casal sem desejo mútuo</li>
+                    </ul>
+                </div>
+
+                <h3 class="subsection-title">Sangramento Uterino Anormal</h3>
+                
+                <h4 class="sub-subsection-title">Fluxo resumido</h4>
+                <div class="step-list">
+                    <ol>
+                        <li>APS realiza avaliação inicial e exames obrigatórios.</li>
+                        <li>Identifica critério de encaminhamento.</li>
+                        <li>Registra tudo no prontuário eletrônico.</li>
+                        <li>Envia pelo Vivver com justificativa completa.</li>
+                        <li>Gestão do cuidado agenda a consulta.</li>
+                        <li>Usuário é informado.</li>
+                        <li>APS acompanha contrarreferência pelo sistema.</li>
+                    </ol>
+                </div>
+
+                <p style="color: #6c757d; line-height: 1.8; margin-top: 15px;">O encaminhamento deve ser feito como <strong>Solicitação de Procedimento de Serviço</strong>, contendo informações clínicas completas (história + exames + CID) e justificativa do encaminhamento.</p>
+
+                <div class="info-box" style="margin-top: 20px;">
+                    <h4>Para enviar:</h4>
+                    <ol>
+                        <li>Selecionar <strong>Consulta Especializada – Ginecologia – Sangramento Uterino Anormal</strong></li>
+                        <li>Motivo: <strong>Regulação</strong></li>
+                        <li>Observação: <strong>SERVIÇO DE SANGRAMENTO UTERINO ANORMAL</strong></li>
+                        <li>Salvar e enviar para fila de espera</li>
+                    </ol>
+                </div>
+
+                <h3 class="subsection-title">Oncologia</h3>
+                <p style="color: #6c757d; line-height: 1.8;">Para consultas de oncologia, seguir as diretrizes estabelecidas na norma técnica específica.</p>
+
+                <a href="https://portal.contagem.mg.gov.br/imgeditor/file/Regula%C3%A7%C3%A3o/Oncologia/NT%2002%20-%202020%20-%20Norma%20T%C3%A9cnica%20Oncologia.pdf" class="highlight-link" target="_blank">
+                    <i class="fas fa-file-pdf"></i>
+                    Acessar NT Oncologia
+                </a>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <i class="fas fa-wheelchair"></i>
+                <h2 class="section-title">Reabilitação - Fluxos Diversos</h2>
+            </div>
+            <div class="section-content">
+                <a href="https://portal.contagem.mg.gov.br/reab" class="highlight-link" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    Acessar Notas Técnicas
+                </a>
+
+                <h3 class="subsection-title">Fisioterapia Ortopédica e Neurológica Leve</h3>
+
+                <h4 class="sub-subsection-title">Forma de solicitação (Sistema Vivver)</h4>
+                <p style="color: #6c757d; line-height: 1.8;">A solicitação deve ser feita exclusivamente pelo sistema Vivver, preenchendo todos os campos obrigatórios, principalmente:</p>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>✔ Diagnóstico</li>
+                    <li>✔ Motivo da indicação</li>
+                    <li>✔ Disfunções que justificam encaminhamento para nível especializado</li>
+                    <li>✔ Histórico clínico e funcional relevante</li>
+                </ul>
+
+                <div class="alert-box" style="margin-top: 20px;">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Observação importante</h4>
+                    <p>➡ Solicitações sem justificativa completa serão colocadas como PENDENTES, impedindo o agendamento.</p>
+                </div>
+
+                <h4 class="sub-subsection-title">Quem pode solicitar</h4>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Profissionais da reabilitação da equipe multiprofissional (eMulti).</li>
+                    <li>Médicos da equipe de Saúde da Família (eSF).</li>
+                    <li>Solicitações externas (UE, rede particular, outras clínicas) devem ser avaliadas pela APS antes do lançamento no Vivver.</li>
+                </ul>
+
+                <h4 class="sub-subsection-title">Como registrar a solicitação – Passo a passo</h4>
+                <div class="step-list">
+                    <ol>
+                        <li>Acessar <strong>Solicitação de Procedimento de Serviço</strong>.</li>
+                        <li>Inserir todos os dados do usuário.</li>
+                        <li>Selecionar o <strong>Tipo de Serviço</strong> referente ao Distrito onde o usuário fará o tratamento.</li>
+                        <li>Preencher <strong>Procedimento + Justificativa</strong>.</li>
+                        <li>Confirmar e salvar a solicitação.</li>
+                    </ol>
+                </div>
+
+                <h4 class="sub-subsection-title">Pendências</h4>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Pendências aparecem destacadas em amarelo no Vivver.</li>
+                    <li>O solicitante tem até <strong>30 dias</strong> para resolvê-las.</li>
+                    <li>Caso não sejam corrigidas no prazo: ➝ A solicitação é excluída e a referência técnica do distrito é notificada.</li>
+                </ul>
+
+                <p style="color: #6c757d; line-height: 1.8; margin-top: 15px;">A UBS deve acompanhar diariamente a tela <strong>"Acompanhamento das Solicitações de Serviço"</strong>.</p>
+
+                <h4 class="sub-subsection-title">Agendamento</h4>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Após regulada, a solicitação entra na fila de espera e é agendada conforme as vagas liberadas pelos serviços do distrito.</li>
+                    <li>A UBS recebe e-mail com a data e local do atendimento.</li>
+                </ul>
+
+                <div class="success-box" style="margin-top: 20px;">
+                    <h4>A UBS deve:</h4>
+                    <p>✔ Imprimir a guia de agendamento</p>
+                    <p>✔ Entregar ao usuário</p>
+                    <p>✔ Orientar que a guia é obrigatória no dia da avaliação</p>
+                    <p style="margin-top: 15px; font-weight: 600;">Sem a guia → o atendimento não é realizado.</p>
+                </div>
+
+                <h4 class="sub-subsection-title">Faltas e avisos de ausência</h4>
+                
+                <p style="color: #495057; font-weight: 600; margin: 15px 0 10px 0;">Falta à primeira consulta (reagendamento possível se justificar)</p>
+                <p style="color: #6c757d; line-height: 1.8;">Só pode reagendar se a falta ocorrer por:</p>
+                <div class="info-box" style="margin-top: 10px;">
+                    <ol>
+                        <li>Internação</li>
+                        <li>Convocação judicial</li>
+                        <li>Prova de concurso (do próprio usuário)</li>
+                        <li>Outros tratamentos de saúde agendados (diálise, cirurgia, quimioterapia etc.)</li>
+                        <li>Falecimento de familiar próximo</li>
+                    </ol>
+                    <p style="margin-top: 15px;">Se não se enquadrar nesses motivos → nova solicitação deve ser aberta.</p>
+                </div>
+
+                <p style="color: #495057; font-weight: 600; margin: 15px 0 10px 0;">Aviso prévio de ausência</p>
+                <p style="color: #6c757d; line-height: 1.8;">Se o usuário avisar antes:</p>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>UBS cancela o agendamento</li>
+                    <li>Solicitação retorna à fila</li>
+                </ul>
+
+                <h4 class="sub-subsection-title">Contrarreferência</h4>
+                <p style="color: #6c757d; line-height: 1.8;">A Atenção Primária pode acompanhar no Vivver: faltas, frequência, abandono, avaliação final e relatório de contrarreferência do serviço. As informações ficam no último registro de atendimento do usuário.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <i class="fas fa-users"></i>
+                <h2 class="section-title">Encaminhamentos Emulti</h2>
+            </div>
+            <div class="section-content">
+                <h3 class="subsection-title">Psicologia, Psiquiatria, Fisioterapia, Nutrição, Assistente Social, T.O., Educador Físico, Ginecologia e Pediatria</h3>
+                
+                <p style="color: #6c757d; line-height: 1.8;">Para consultas com essas especialidades, o paciente deverá pegar encaminhamento com o profissional médico da Unidade Básica de Saúde, o mesmo será avaliado pelos profissionais da Emulti e será agendado em agenda interna dentro da unidade.</p>
+              </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <i class="fas fa-hospital"></i>
+                <h2 class="section-title">Cirurgias Eletivas</h2>
+            </div>
+            <div class="section-content">
+                <a href="https://portal.contagem.mg.gov.br/cirurgia-eletiva/" class="highlight-link" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    Fluxos Diversos - Acessar Notas Técnicas
+                </a>
+
+                <h3 class="subsection-title">Cirurgias Cardio Vascular</h3>
+                
+                <div class="alert-box">
+                    <p>• Os municípios de Contagem e Belo Horizonte <strong>NÃO possuem atendimento eletivo especializado em Cirurgia Vascular Cardiologia</strong>.</p>
+                    <p style="margin-top: 10px;">• Por esse motivo, toda solicitação deve ser feita por <strong>AIH</strong>, preenchida em formulário padrão.</p>
+                </div>
+
+                <h4 class="sub-subsection-title">Quem deve emitir a AIH</h4>
+                <p style="color: #6c757d; line-height: 1.8;">Médico da rede SUS Contagem ou SUS Belo Horizonte, preenchendo todos os campos de forma legível.</p>
+
+                <h4 class="sub-subsection-title">Informações obrigatórias na AIH</h4>
+                
+                <p style="color: #495057; font-weight: 600; margin: 15px 0 10px 0;">Dados do usuário:</p>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Nome completo</li>
+                    <li>Sexo</li>
+                    <li>Data de nascimento</li>
+                    <li>Endereço completo</li>
+                    <li>Telefone atualizado</li>
+                </ul>
+
+                <p style="color: #495057; font-weight: 600; margin: 15px 0 10px 0;">Dados do estabelecimento:</p>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Identificação da unidade solicitante</li>
+                    <li>Carimbo da unidade de saúde</li>
+                    <li>Número do prontuário/cadastro no sistema</li>
+                </ul>
+
+                <p style="color: #495057; font-weight: 600; margin: 15px 0 10px 0;">Informações clínicas obrigatórias:</p>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Justificativa detalhada do quadro clínico</li>
+                    <li>Início da doença, sintomas e sinais de alerta</li>
+                    <li>Fatores de risco (tabagismo, etilismo, drogas)</li>
+                    <li>Medicamentos em uso</li>
+                    <li>Comorbidades</li>
+                    <li>Histórico familiar/pessoal relevante</li>
+                    <li>Achados do exame físico</li>
+                    <li>Resultados principais de exames diagnósticos</li>
+                    <li>Código SIGTAP e descrição do procedimento solicitado</li>
+                    <li>CID da suspeita inicial</li>
+                    <li>Dados completos do profissional solicitante: nome, CPF, conselho, carimbo e assinatura</li>
+                    <li>Data de emissão</li>
+                </ul>
+
+                <h4 class="sub-subsection-title">Documentos obrigatórios anexados</h4>
+                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                    <li>Cópia do Cartão SUS (CNS) atualizado no CADSUS-WEB</li>
+                    <li>Documento de identificação (RG ou certidão)</li>
+                    <li>CPF</li>
+                    <li>Comprovante de endereço em nome do usuário (se estiver em nome do cônjuge → anexar certidão de casamento ou declaração da UBS)</li>
+                    <li>Para menores de 18 anos: documentos do responsável legal + declaração quando necessário</li>
+                    <li>Exames e laudos que justifiquem o procedimento cirúrgico</li>
+                </ul>
+
+                <div class="info-box" style="margin-top: 20px;">
+                    <h4><i class="fas fa-exclamation-circle"></i> Regras essenciais</h4>
+                    <p>• Solicitações incompletas ou sem documentos serão devolvidas para correção.</p>
+                    <p>• Casos que exigem avaliação ou diagnóstico imediato devem seguir o fluxo de urgência, e não o eletivo.</p>
+                </div>
+
+                <h4 class="sub-subsection-title">Forma de Entrega</h4>
+                <p style="color: #6c757d; line-height: 1.8;">As AIHs de Cirurgia Vascular Cardiologia devem ser protocoladas diretamente pelo usuário/responsável no <strong>Guichê do Complexo Regulador</strong>, pois são tratadas como prioridade na regulação e acesso.</p>
+
+                <a href="https://portal.contagem.mg.gov.br/imgeditor/file/Regula%C3%A7%C3%A3o/Media%20e%20alta%20complexidade/NT%2007%20-%202022%20-%20Orienta%C3%A7%C3%B5es%20Cirurgia%20Vascular%20Cardiologia.pdf" class="highlight-link" target="_blank">
+                    <i class="fas fa-file-pdf"></i>
+                    Acessar NT Cirurgias Cardio Vascular
+                </a>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <i class="fas fa-phone"></i>
+                <h2 class="section-title">Contatos Importantes</h2>
+            </div>
+            <div class="section-content">
+                <div class="contact-info">
+                    <p><strong>Diretoria de Rugulação Ceaps</strong></p>
+                    <p>Entre em Contato Para solicitações de remarcação e esclarecimentos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <i class="fas fa-heartbeat"></i>
+        <p><strong>Diretoria de Regulação/Ceaps</strong></p>
+        <p>Sistema de Agendamento e Procedimentos</p>
+        <p>Página criada por Ana P. A. Silva - Suporte Vivver/Distrito Sanitário Eldorado</p>
+        <p>© 2024 - Todos os direitos reservados</p>
+    </div>
+
+    <script>
+        // Animação de entrada da página
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '1';
+        });
+
+        // Funcionalidade de pesquisa
+        document.getElementById('searchButton').addEventListener('click', function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const content = document.querySelector('.container');
+            
+            if (searchTerm) {
+                // Remove highlights anteriores
+                content.innerHTML = content.innerHTML.replace(/<mark>/g, '').replace(/<\/mark>/g, '');
+                
+                // Adiciona highlights
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                content.innerHTML = content.innerHTML.replace(regex, '<mark>$1</mark>');
+                
+                // Scroll para o primeiro resultado
+                const firstMark = document.querySelector('mark');
+                if (firstMark) {
+                    firstMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
+        document.getElementById('clearSearchButton').addEventListener('click', function() {
+            document.getElementById('searchInput').value = '';
+            const content = document.querySelector('.container');
+            content.innerHTML = content.innerHTML.replace(/<mark>/g, '').replace(/<\/mark>/g, '');
+        });
+
+        // Pesquisa ao pressionar Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('searchButton').click();
+            }
+        });
+
+        // Scroll suave para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
