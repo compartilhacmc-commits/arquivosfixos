@@ -83,34 +83,76 @@
             margin-top: 20px;
         }
 
+        /* (MUDANÇA) Nova barra de busca no estilo da imagem */
         .search-box {
             display: flex;
-            gap: 10px;
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            align-items: center;
+            gap: 0;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            backdrop-filter: none;
+            border: none;
+        }
+
+        .search-field {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9aa0a6;
+            font-size: 1rem;
+            pointer-events: none;
         }
 
         .search-input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
+            width: 100%;
+            padding: 12px 44px 12px 42px; /* espaço p/ lupa e p/ X */
+            border: 2px solid #9C4A6F;
+            border-radius: 6px;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
+            transition: all 0.2s ease;
+            background: #fff;
         }
 
         .search-input:focus {
             outline: none;
             border-color: #9C4A6F;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(156, 74, 111, 0.1);
+            box-shadow: 0 0 0 3px rgba(156, 74, 111, 0.15);
         }
 
+        /* Botão X dentro do input (aparece só quando tem texto) */
+        .clear-inline {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #6c757d;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: none; /* controlado por JS */
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .clear-inline:hover {
+            background: rgba(0,0,0,0.06);
+        }
+
+        /* Mantive as classes antigas (search-button/clear-button) definidas,
+           mas agora não são mais usadas no HTML. */
         .search-button, .clear-button {
             padding: 12px 20px;
             border: none;
@@ -367,7 +409,7 @@
         .contact-info {
             background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
             border-radius: 10px;
-            padding: 15px;
+            padding:  15px;
             margin: 15px 0;
             border-left: 4px solid #4caf50;
         }
@@ -465,6 +507,17 @@
             font-weight: 600;
         }
 
+        /* (MUDANÇA) marcação do bloco encontrado */
+        .search-match {
+            outline: 2px solid rgba(156, 74, 111, 0.25);
+            border-radius: 10px;
+        }
+
+        /* (MUDANÇA) bloco/section escondido quando não bate */
+        .search-hidden {
+            display: none !important;
+        }
+
         /* Responsividade */
         @media (max-width: 768px) {
             .header-content {
@@ -484,10 +537,6 @@
             .demand-container {
                 grid-template-columns: 1fr;
                 gap: 15px;
-            }
-
-            .search-box {
-                flex-direction: column;
             }
 
             .container {
@@ -511,8 +560,8 @@
                 font-size: 1.2rem;
             }
 
-            .search-input, .search-button, .clear-button {
-                padding: 10px 15px;
+            .search-input {
+                padding: 10px 44px 10px 42px;
             }
 
             .container {
@@ -539,13 +588,13 @@
     
     <div class="search-container">
         <div class="search-box">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Pesquisar na página...">
-            <button id="searchButton" class="search-button">
-                <i class="fas fa-search"></i> Pesquisar
-            </button>
-            <button id="clearSearchButton" class="clear-button">
-                <i class="fas fa-times"></i> Limpar
-            </button>
+            <div class="search-field">
+                <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar na página...">
+                <button id="clearInlineButton" class="clear-inline" type="button" aria-label="Limpar pesquisa" title="Limpar">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -556,7 +605,9 @@
                 <h2 class="section-title">Resumo dos Fluxos de Marcação de Consultas</h2>
             </div>
             <div class="section-content">
-                <p class="intro-text">Este documento apresenta o resumo dos fluxos para marcação de consultas especializadas e exames, organizando os procedimentos por demanda e especificando os canais apropriados para cada tipo de serviço.</p>
+                <div data-search-block>
+                    <p class="intro-text">Este documento apresenta o resumo dos fluxos para marcação de consultas especializadas e exames, organizando os procedimentos por demanda e especificando os canais apropriados para cada tipo de serviço.</p>
+                </div>
             </div>
         </div>
 
@@ -566,49 +617,55 @@
                 <h2 class="section-title">Teleconsultoria – Regras Principais</h2>
             </div>
             <div class="section-content">
-                <h3 class="subsection-title">Quando é obrigatória?</h3>
-                <div class="alert-box">
-                    <h4><i class="fas fa-exclamation-triangle"></i> Atenção!</h4>
-                    <p>A partir do dia <strong>15 de Dezembro/2025</strong>, toda solicitação para especialidades listadas no Quadro 1 da NT 25/2025 só pode ser inserida no Vivver com a teleconsultoria anexada.</p>
+                <div data-search-block>
+                    <h3 class="subsection-title">Quando é obrigatória?</h3>
+                    <div class="alert-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Atenção!</h4>
+                        <p>A partir do dia <strong>15 de Dezembro/2025</strong>, toda solicitação para especialidades listadas no Quadro 1 da NT 25/2025 só pode ser inserida no Vivver com a teleconsultoria anexada.</p>
+                    </div>
                 </div>
 
-                <h3 class="subsection-title">Como funciona a teleconsultoria?</h3>
-                <div class="step-list">
-                    <ol>
-                        <li><strong>Médico da APS</strong> identifica possível necessidade de especialista.</li>
-                        <li>Abre solicitação na plataforma <strong>FELUMA</strong> ("Teleconsultoria Contagem").</li>
-                        <li>Preenche quadro clínico completo (história, exames, evolução).</li>
-                        <li><strong>Teleconsultor responde em até 72h</strong> com condutas e orientações.</li>
-                    </ol>
-                </div>
+                <div data-search-block>
+                    <h3 class="subsection-title">Como funciona a teleconsultoria?</h3>
+                    <div class="step-list">
+                        <ol>
+                            <li><strong>Médico da APS</strong> identifica possível necessidade de especialista.</li>
+                            <li>Abre solicitação na plataforma <strong>FELUMA</strong> ("Teleconsultoria Contagem").</li>
+                            <li>Preenche quadro clínico completo (história, exames, evolução).</li>
+                            <li><strong>Teleconsultor responde em até 72h</strong> com condutas e orientações.</li>
+                        </ol>
+                    </div>
 
-                <h4 class="sub-subsection-title">Desfechos possíveis:</h4>
-                <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
-                    <li><strong>Caso resolvível na APS:</strong> teleconsultor orienta condutas e o caso permanece na unidade.</li>
-                    <li><strong>Necessidade de especialista:</strong> teleconsultor classifica risco e orienta exames e fluxo.</li>
-                </ul>
-                <p style="color: #6c757d; line-height: 1.8; margin-top: 15px;">Após a última resposta, o profissional deve registrar <strong>Desfecho Profissional</strong> e fechar a teleconsultoria.</p>
-
-                <h3 class="subsection-title">Organização da Agenda</h3>
-                <div class="info-box">
-                    <h4><i class="fas fa-calendar-check"></i> Importante</h4>
-                    <p>UBS deve reservar horário específico na agenda médica para:</p>
-                    <ul>
-                        <li>Registrar e acompanhar teleconsultorias</li>
-                        <li>Realizar retornos dos pacientes após a resposta</li>
-                        <li>Cumprir orientações do teleconsultor</li>
+                    <h4 class="sub-subsection-title">Desfechos possíveis:</h4>
+                    <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
+                        <li><strong>Caso resolvível na APS:</strong> teleconsultor orienta condutas e o caso permanece na unidade.</li>
+                        <li><strong>Necessidade de especialista:</strong> teleconsultor classifica risco e orienta exames e fluxo.</li>
                     </ul>
+                    <p style="color: #6c757d; line-height: 1.8; margin-top: 15px;">Após a última resposta, o profissional deve registrar <strong>Desfecho Profissional</strong> e fechar a teleconsultoria.</p>
                 </div>
 
-                <h3 class="subsection-title">Registros obrigatórios</h3>
-                <p style="color: #6c757d; line-height: 1.8;">Toda conduta deve constar no prontuário eletrônico desde a primeira consulta.</p>
+                <div data-search-block>
+                    <h3 class="subsection-title">Organização da Agenda</h3>
+                    <div class="info-box">
+                        <h4><i class="fas fa-calendar-check"></i> Importante</h4>
+                        <p>UBS deve reservar horário específico na agenda médica para:</p>
+                        <ul>
+                            <li>Registrar e acompanhar teleconsultorias</li>
+                            <li>Realizar retornos dos pacientes após a resposta</li>
+                            <li>Cumprir orientações do teleconsultor</li>
+                        </ul>
+                    </div>
 
-                <a href="https://portal.contagem.mg.gov.br/central-de-marcacao-de-consultas/" class="highlight-link" target="_blank">
-                    <i class="fas fa-external-link-alt"></i>
-                    Acessar NT 25/2025
-                </a>
+                    <h3 class="subsection-title">Registros obrigatórios</h3>
+                    <p style="color: #6c757d; line-height: 1.8;">Toda conduta deve constar no prontuário eletrônico desde a primeira consulta.</p>
 
-                <div class="alert-box">
+                    <a href="https://portal.contagem.mg.gov.br/central-de-marcacao-de-consultas/" class="highlight-link" target="_blank">
+                        <i class="fas fa-external-link-alt"></i>
+                        Acessar NT 25/2025
+                    </a>
+                </div>
+
+                <div class="alert-box" data-search-block>
                     <h4><i class="fas fa-bell"></i> IMPORTANTE</h4>
                     
                     <h3 class="subsection-title">Especialidades que NÃO exigem Teleconsultoria:</h3>
@@ -672,7 +729,7 @@
                 <i class="fas fa-desktop"></i>
                 <h2 class="section-title">Como Encaminhar após a Teleconsultoria (Sistema Vivver)</h2>
             </div>
-            <div class="section-content">
+            <div class="section-content" data-search-block>
                 <h3 class="subsection-title">Passo a passo:</h3>
                 <div class="step-list">
                     <ol>
@@ -697,36 +754,38 @@
                 <h2 class="section-title">Regulação e Agendamento (NT 25/2025)</h2>
             </div>
             <div class="section-content">
-                <h3 class="subsection-title">Consultas Especializadas – Como são classificadas</h3>
+                <div data-search-block>
+                    <h3 class="subsection-title">Consultas Especializadas – Como são classificadas</h3>
 
-                <h4 class="sub-subsection-title">Consultas não reguladas (sem passar pela CMC)</h4>
-                <div class="success-box">
-                    <h4><i class="fas fa-check-circle"></i> Especialidades</h4>
-                    <p>• <strong>Cirurgia Ambulatorial</strong></p>
-                    <p>• <strong>Mastologia</strong></p>
-                    <p>• <strong>Acolhimento SAE adulto/infantil</strong></p>
-                    <p style="margin-top: 15px;">Nesses casos, o próprio profissional agenda direto no sistema Vivver.</p>
+                    <h4 class="sub-subsection-title">Consultas não reguladas (sem passar pela CMC)</h4>
+                    <div class="success-box">
+                        <h4><i class="fas fa-check-circle"></i> Especialidades</h4>
+                        <p>• <strong>Cirurgia Ambulatorial</strong></p>
+                        <p>• <strong>Mastologia</strong></p>
+                        <p>• <strong>Acolhimento SAE adulto/infantil</strong></p>
+                        <p style="margin-top: 15px;">Nesses casos, o próprio profissional agenda direto no sistema Vivver.</p>
+                    </div>
+
+                    <p style="color: #6c757d; line-height: 1.8; margin: 15px 0;">Os profissionais de saúde — médicos e enfermeiros (especificamente para Cirurgia Ambulatorial, Mastologia e Acolhimento SAE adulto) deverão realizar a inserção da solicitação diretamente no sistema VIVVER, conforme orientações descritas na NT 25/2025. Ao salvar a solicitação no sistema, será automaticamente exibida a tela de Agendamento, permitindo ao profissional verificar a disponibilidade de vagas e realizar o agendamento da consulta.</p>
+
+                    <p style="color: #6c757d; line-height: 1.8; margin: 15px 0;">O profissional solicitante deverá efetuar o agendamento da consulta, imprimir o comprovante gerado pelo sistema VIVVER e entregá-lo ao usuário.</p>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Em caso de indisponibilidade de vagas</h4>
+                        <p>O profissional deverá imprimir a solicitação e orientar o usuário a protocolar o documento no setor administrativo da unidade. O setor administrativo, por sua vez, deverá comunicar imediatamente à CMC a ausência de vagas na especialidade, para que seja avaliada a necessidade de ajustes no fluxo, como a criação de fila de espera.</p>
+                    </div>
+
+                    <p style="color: #6c757d; line-height: 1.8; margin: 15px 0;">Para <strong>Acolhimento SAE – adulto e infantil</strong>, as solicitações serão realizadas seguindo a NI01/2025 – Agendamento de primeiras consultas no SAE/CTA Iria Diniz.</p>
+
+                    <div class="alert-box">
+                        <h4><i class="fas fa-bell"></i> IMPORTANTE</h4>
+                        <p>Sempre que houver alterações no rol de consultas especializadas reguladas e não reguladas, a Rede será oficialmente comunicada por meio da atualização desta Nota Técnica.</p>
+                    </div>
+
+                    <h4 class="sub-subsection-title">Consultas reguladas (SUS-Contagem)</h4>
+                    <p style="color: #6c757d; line-height: 1.8;">Todas as especialidades da rede própria reguladas via Central de Marcação de Consultas.</p>
+                    <p style="color: #6c757d; line-height: 1.8; margin-top: 10px;">A Rede SUS-Contagem possui especialidades próprias que são ofertadas. Para acesso a essas especialidades o profissional deverá realizar os procedimentos conforme a Nota Técnica Conjunta - 032 - Integração da teleconsultoria e regulação para encaminhamentos aos especialistas e a NT25/2025. Deverá ser anexado o <strong>"Desfecho da Teleconsultoria"</strong>, na solicitação.</p>
                 </div>
-
-                <p style="color: #6c757d; line-height: 1.8; margin: 15px 0;">Os profissionais de saúde — médicos e enfermeiros (especificamente para Cirurgia Ambulatorial, Mastologia e Acolhimento SAE adulto) deverão realizar a inserção da solicitação diretamente no sistema VIVVER, conforme orientações descritas na NT 25/2025. Ao salvar a solicitação no sistema, será automaticamente exibida a tela de Agendamento, permitindo ao profissional verificar a disponibilidade de vagas e realizar o agendamento da consulta.</p>
-
-                <p style="color: #6c757d; line-height: 1.8; margin: 15px 0;">O profissional solicitante deverá efetuar o agendamento da consulta, imprimir o comprovante gerado pelo sistema VIVVER e entregá-lo ao usuário.</p>
-
-                <div class="info-box">
-                    <h4><i class="fas fa-info-circle"></i> Em caso de indisponibilidade de vagas</h4>
-                    <p>O profissional deverá imprimir a solicitação e orientar o usuário a protocolar o documento no setor administrativo da unidade. O setor administrativo, por sua vez, deverá comunicar imediatamente à CMC a ausência de vagas na especialidade, para que seja avaliada a necessidade de ajustes no fluxo, como a criação de fila de espera.</p>
-                </div>
-
-                <p style="color: #6c757d; line-height: 1.8; margin: 15px 0;">Para <strong>Acolhimento SAE – adulto e infantil</strong>, as solicitações serão realizadas seguindo a NI01/2025 – Agendamento de primeiras consultas no SAE/CTA Iria Diniz.</p>
-
-                <div class="alert-box">
-                    <h4><i class="fas fa-bell"></i> IMPORTANTE</h4>
-                    <p>Sempre que houver alterações no rol de consultas especializadas reguladas e não reguladas, a Rede será oficialmente comunicada por meio da atualização desta Nota Técnica.</p>
-                </div>
-
-                <h4 class="sub-subsection-title">Consultas reguladas (SUS-Contagem)</h4>
-                <p style="color: #6c757d; line-height: 1.8;">Todas as especialidades da rede própria reguladas via Central de Marcação de Consultas.</p>
-                <p style="color: #6c757d; line-height: 1.8; margin-top: 10px;">A Rede SUS-Contagem possui especialidades próprias que são ofertadas. Para acesso a essas especialidades o profissional deverá realizar os procedimentos conforme a Nota Técnica Conjunta - 032 - Integração da teleconsultoria e regulação para encaminhamentos aos especialistas e a NT25/2025. Deverá ser anexado o <strong>"Desfecho da Teleconsultoria"</strong>, na solicitação.</p>
             </div>
         </div>
 
@@ -735,7 +794,7 @@
                 <i class="fas fa-hospital"></i>
                 <h2 class="section-title">Consultas pactuadas (BH – PPI)</h2>
             </div>
-            <div class="section-content">
+            <div class="section-content" data-search-block>
                 <p style="color: #6c757d; line-height: 1.8; margin-bottom: 15px;">Algumas especialidades seguem critérios específicos (Obesidade, Transexualização, Clínica da Dor, Medicina Fetal, etc.). Exigem anexos e justificativas específicas.</p>
 
                 <div style="overflow-x: auto;">
@@ -794,7 +853,7 @@
                 <i class="fas fa-file-alt"></i>
                 <h2 class="section-title">Protocolo de Solicitação</h2>
             </div>
-            <div class="section-content">
+            <div class="section-content" data-search-block>
                 <p style="color: #6c757d; line-height: 1.8;">Para as solicitações de consultas especializadas que não estiverem incluídas na Teleconsultoria, a emissão do <strong>Protocolo de Solicitação</strong> é uma etapa fundamental. Este protocolo é a comprovação oficial de que o profissional realizou a solicitação no sistema, garantindo a rastreabilidade e a segurança das informações inseridas.</p>
 
                 <div class="success-box" style="margin-top: 20px;">
@@ -811,7 +870,7 @@
                 <i class="fas fa-exclamation-circle"></i>
                 <h2 class="section-title">Verificação Diária de Pendências</h2>
             </div>
-            <div class="section-content">
+            <div class="section-content" data-search-block>
                 <div class="alert-box">
                     <h4><i class="fas fa-clock"></i> É obrigatória!</h4>
                     <p>• As pendências devem ser verificadas no sistema Vivver <strong>todos os dias</strong></p>
@@ -828,7 +887,7 @@
                 <i class="fas fa-calendar-check"></i>
                 <h2 class="section-title">Agendamentos</h2>
             </div>
-            <div class="section-content">
+            <div class="section-content" data-search-block>
                 <p style="color: #6c757d; line-height: 1.8;">Depois que a Regulação/CMC agendar as consultas, a UBS:</p>
 
                 <div class="step-list" style="margin-top: 15px;">
@@ -850,7 +909,7 @@
                 <i class="fas fa-calendar-times"></i>
                 <h2 class="section-title">Remarcações e Faltas</h2>
             </div>
-            <div class="section-content">
+            <div class="section-content" data-search-block>
                 <div class="info-box">
                     <h4><i class="fas fa-calendar-alt"></i> Procedimentos para Remarcação</h4>
                     <p><strong>Usuário solicita o cancelamento com antecedência, prazo máximo (72 Horas):</strong></p>
@@ -884,7 +943,7 @@
                 <i class="fas fa-redo"></i>
                 <h2 class="section-title">Solicitação de Retorno</h2>
             </div>
-            <div class="section-content">
+            <div class="section-content" data-search-block>
                 <h3 class="subsection-title">Inserida diretamente pelo CAE / especialista</h3>
                 <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
                     <li><strong>Tipo:</strong> RETORNO</li>
@@ -907,39 +966,41 @@
                 <h2 class="section-title">Reclassificação de Prioridade</h2>
             </div>
             <div class="section-content">
-                <p style="color: #6c757d; line-height: 1.8;">Quando houver agravamento clínico:</p>
+                <div data-search-block>
+                    <p style="color: #6c757d; line-height: 1.8;">Quando houver agravamento clínico:</p>
 
-                <div class="step-list" style="margin-top: 15px;">
-                    <ol>
-                        <li>Atualizar o quadro no campo <strong>Observação</strong></li>
-                        <li>Reenviar com prioridade <strong>"RECLASSIFICAÇÃO DE PRIORIDADE"</strong></li>
-                    </ol>
+                    <div class="step-list" style="margin-top: 15px;">
+                        <ol>
+                            <li>Atualizar o quadro no campo <strong>Observação</strong></li>
+                            <li>Reenviar com prioridade <strong>"RECLASSIFICAÇÃO DE PRIORIDADE"</strong></li>
+                        </ol>
+                    </div>
+
+                    <div class="info-box" style="margin-top: 20px;">
+                        <h4><i class="fas fa-file-medical"></i> O relatório deve ser feito somente quando o quadro clínico justificar</h4>
+                        <p style="margin-top: 10px;">✔ Agravamento do estado de saúde</p>
+                        <p>✔ Novo comprometimento clínico relevante</p>
+                        <p>✔ Necessidade de atendimento mais rápido</p>
+                        <p style="margin-top: 15px; font-weight: 600;">O relatório pode ser solicitado para:</p>
+                        <ul>
+                            <li>1ª consulta</li>
+                            <li>Retorno</li>
+                            <li>Exames</li>
+                            <li>Procedimentos</li>
+                            <li>Cirurgias eletivas</li>
+                        </ul>
+                    </div>
+
+                    <a href="https://portal.contagem.mg.gov.br/central-de-marcacao-de-consultas/" class="highlight-link" target="_blank">
+                        <i class="fas fa-external-link-alt"></i>
+                        Acessar NT 25/2025
+                    </a>
+
+                    <a href="https://portal.contagem.mg.gov.br/imgeditor/file/Regula%C3%A7%C3%A3o/Nota%20tecnica%20conjunta/NT%2024%20-%202025%20-%20Registro%20e%20Envio%20de%20Relat%C3%B3rio%20para%20Reclassifica%C3%A7%C3%A3o%20de%20Prioridade(2).pdf" class="highlight-link" target="_blank">
+                        <i class="fas fa-file-pdf"></i>
+                        NT Relatório de Prioridade
+                    </a>
                 </div>
-
-                <div class="info-box" style="margin-top: 20px;">
-                    <h4><i class="fas fa-file-medical"></i> O relatório deve ser feito somente quando o quadro clínico justificar</h4>
-                    <p style="margin-top: 10px;">✔ Agravamento do estado de saúde</p>
-                    <p>✔ Novo comprometimento clínico relevante</p>
-                    <p>✔ Necessidade de atendimento mais rápido</p>
-                    <p style="margin-top: 15px; font-weight: 600;">O relatório pode ser solicitado para:</p>
-                    <ul>
-                        <li>1ª consulta</li>
-                        <li>Retorno</li>
-                        <li>Exames</li>
-                        <li>Procedimentos</li>
-                        <li>Cirurgias eletivas</li>
-                    </ul>
-                </div>
-
-                <a href="https://portal.contagem.mg.gov.br/central-de-marcacao-de-consultas/" class="highlight-link" target="_blank">
-                    <i class="fas fa-external-link-alt"></i>
-                    Acessar NT 25/2025
-                </a>
-
-                <a href="https://portal.contagem.mg.gov.br/imgeditor/file/Regula%C3%A7%C3%A3o/Nota%20tecnica%20conjunta/NT%2024%20-%202025%20-%20Registro%20e%20Envio%20de%20Relat%C3%B3rio%20para%20Reclassifica%C3%A7%C3%A3o%20de%20Prioridade(2).pdf" class="highlight-link" target="_blank">
-                    <i class="fas fa-file-pdf"></i>
-                    NT Relatório de Prioridade
-                </a>
             </div>
         </div>
 
@@ -948,7 +1009,7 @@
                 <i class="fas fa-exclamation-triangle"></i>
                 <h2 class="section-title">Contingência (Sistema Fora do Ar)</h2>
             </div>
-            <div class="section-content">
+            <div class="section-content" data-search-block>
                 <div class="alert-box">
                     <p>• Se exigir teleconsultoria → <strong>emitir guia física</strong> e realizar teleconsultoria quando sistema voltar.</p>
                     <p style="margin-top: 10px;">• Se não exigir → <strong>emitir guia física</strong> e UBS deve depois inserir tudo no Vivver.</p>
@@ -966,7 +1027,7 @@
                 <i class="fas fa-list-ul"></i>
                 <h2 class="section-title">Regras Especiais</h2>
             </div>
-            <div class="section-content">
+            <div class="section-content" data-search-block>
                 <ul style="color: #6c757d; line-height: 2; margin-left: 20px; font-size: 1.05rem;">
                     <li><strong>Especialistas</strong> podem solicitar consultas para outra especialidade via Vivver <strong>sem teleconsultoria</strong>.</li>
                     <li>Consultas advindas de <strong>UPA ou rede privada não são aceitas</strong> — devem ser refeitas na UBS.</li>
@@ -985,7 +1046,7 @@
                 <i class="fas fa-clipboard-list"></i>
                 <h2 class="section-title">Síntese Final Unificada</h2>
             </div>
-            <div class="section-content">
+            <div class="section-content" data-search-block>
                 <p style="color: #495057; font-weight: 600; margin-bottom: 15px;">Para solicitar qualquer consulta especializada na rede Contagem:</p>
 
                 <div class="step-list">
@@ -1024,39 +1085,141 @@
             document.body.style.opacity = '1';
         });
 
-        // Funcionalidade de pesquisa
-        document.getElementById('searchButton').addEventListener('click', function() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const content = document.querySelector('.container');
-            
-            if (searchTerm) {
-                // Remove highlights anteriores
-                content.innerHTML = content.innerHTML.replace(/<mark>/g, '').replace(/<\/mark>/g, '');
-                
-                // Adiciona highlights
-                const regex = new RegExp(`(${searchTerm})`, 'gi');
-                content.innerHTML = content.innerHTML.replace(regex, '<mark>$1</mark>');
-                
-                // Scroll para o primeiro resultado
-                const firstMark = document.querySelector('mark');
-                if (firstMark) {
-                    firstMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // (MUDANÇA) Funcionalidade de pesquisa: busca automática por blocos (data-search-block)
+        (function () {
+            const input = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearInlineButton');
+
+            const allSections = Array.from(document.querySelectorAll('.content-section'));
+            const blocks = Array.from(document.querySelectorAll('[data-search-block]'));
+
+            function escapeRegExp(str) {
+                return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+
+            function removeMarks(root) {
+                root.querySelectorAll('mark').forEach(m => {
+                    const text = document.createTextNode(m.textContent);
+                    m.replaceWith(text);
+                });
+            }
+
+            function highlightInBlock(block, term) {
+                // Remove marks antigos apenas dentro do bloco
+                removeMarks(block);
+
+                const regex = new RegExp(escapeRegExp(term), 'gi');
+
+                const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT, {
+                    acceptNode: (node) => {
+                        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+                        const parent = node.parentNode;
+                        if (!parent) return NodeFilter.FILTER_REJECT;
+                        // Não mexer em script/style e nem dentro de links/ícones de fontawesome por segurança
+                        const tag = parent.nodeName.toLowerCase();
+                        if (tag === 'script' || tag === 'style') return NodeFilter.FILTER_REJECT;
+                        return NodeFilter.FILTER_ACCEPT;
+                    }
+                });
+
+                const textNodes = [];
+                while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+                textNodes.forEach(node => {
+                    const value = node.nodeValue;
+                    if (!regex.test(value)) return;
+
+                    const frag = document.createDocumentFragment();
+                    let lastIndex = 0;
+                    regex.lastIndex = 0;
+
+                    let match;
+                    while ((match = regex.exec(value)) !== null) {
+                        const start = match.index;
+                        const end = start + match[0].length;
+
+                        frag.appendChild(document.createTextNode(value.slice(lastIndex, start)));
+
+                        const mark = document.createElement('mark');
+                        mark.textContent = value.slice(start, end);
+                        frag.appendChild(mark);
+
+                        lastIndex = end;
+                    }
+
+                    frag.appendChild(document.createTextNode(value.slice(lastIndex)));
+                    node.parentNode.replaceChild(frag, node);
+                });
+            }
+
+            function applySearch() {
+                const term = input.value.trim();
+                const hasText = term.length > 0;
+
+                clearBtn.style.display = hasText ? 'flex' : 'none';
+
+                // Reset visual
+                allSections.forEach(sec => sec.classList.remove('search-hidden'));
+                blocks.forEach(b => b.classList.remove('search-hidden', 'search-match'));
+
+                // Se não tem termo: limpa highlights e mostra tudo
+                if (!hasText) {
+                    blocks.forEach(b => removeMarks(b));
+                    return;
+                }
+
+                // Filtra por blocos
+                const termLower = term.toLowerCase();
+
+                let firstVisibleBlock = null;
+
+                blocks.forEach(block => {
+                    const text = block.textContent.toLowerCase();
+                    const match = text.includes(termLower);
+
+                    if (!match) {
+                        block.classList.add('search-hidden');
+                        removeMarks(block);
+                    } else {
+                        block.classList.remove('search-hidden');
+                        block.classList.add('search-match');
+
+                        highlightInBlock(block, term);
+
+                        if (!firstVisibleBlock) firstVisibleBlock = block;
+                    }
+                });
+
+                // Esconde sections que ficaram sem nenhum bloco visível
+                allSections.forEach(section => {
+                    const visibleBlockInside = section.querySelector('[data-search-block]:not(.search-hidden)');
+                    if (!visibleBlockInside) section.classList.add('search-hidden');
+                });
+
+                // Scroll para o primeiro bloco encontrado
+                if (firstVisibleBlock) {
+                    firstVisibleBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             }
-        });
 
-        document.getElementById('clearSearchButton').addEventListener('click', function() {
-            document.getElementById('searchInput').value = '';
-            const content = document.querySelector('.container');
-            content.innerHTML = content.innerHTML.replace(/<mark>/g, '').replace(/<\/mark>/g, '');
-        });
+            // Busca automática enquanto digita
+            input.addEventListener('input', applySearch);
 
-        // Pesquisa ao pressionar Enter
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('searchButton').click();
-            }
-        });
+            // Limpar
+            clearBtn.addEventListener('click', function () {
+                input.value = '';
+                input.focus();
+                applySearch();
+            });
+
+            // ESC também limpa
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    input.value = '';
+                    applySearch();
+                }
+            });
+        })();
 
         // Scroll suave para links internos
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1074,6 +1237,3 @@
     </script>
 </body>
 </html>
-
-
-
