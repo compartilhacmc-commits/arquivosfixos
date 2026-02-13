@@ -83,10 +83,11 @@
             margin-top: 20px;
         }
 
-        /* (MUDANÇA) Nova barra de busca no estilo da imagem */
+        /* Barra de busca no estilo da imagem + CENTRALIZADA */
         .search-box {
             display: flex;
             align-items: center;
+            justify-content: center; /* CENTRALIZA */
             gap: 0;
             background: transparent;
             padding: 0;
@@ -149,39 +150,6 @@
 
         .clear-inline:hover {
             background: rgba(0,0,0,0.06);
-        }
-
-        /* Mantive as classes antigas (search-button/clear-button) definidas,
-           mas agora não são mais usadas no HTML. */
-        .search-button, .clear-button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .search-button {
-            background: #9C4A6F;
-            color: white;
-        }
-
-        .search-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(156, 74, 111, 0.3);
-        }
-
-        .clear-button {
-            background: #f8f9fa;
-            color: #6c757d;
-            border: 2px solid #e9ecef;
-        }
-
-        .clear-button:hover {
-            background: #e9ecef;
-            border-color: #dee2e6;
         }
 
         .container {
@@ -409,7 +377,7 @@
         .contact-info {
             background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
             border-radius: 10px;
-            padding:  15px;
+            padding: 15px;
             margin: 15px 0;
             border-left: 4px solid #4caf50;
         }
@@ -507,13 +475,13 @@
             font-weight: 600;
         }
 
-        /* (MUDANÇA) marcação do bloco encontrado */
+        /* Marcação do bloco encontrado */
         .search-match {
             outline: 2px solid rgba(156, 74, 111, 0.25);
             border-radius: 10px;
         }
 
-        /* (MUDANÇA) bloco/section escondido quando não bate */
+        /* Bloco/section escondido quando não bate */
         .search-hidden {
             display: none !important;
         }
@@ -861,7 +829,7 @@
                     <p>Após a inserção da solicitação no sistema, o profissional solicitante deve gerar o <strong>Protocolo Procedimento Serviço</strong>, e o protocolo gerado deve ser entregue ao usuário.</p>
                 </div>
 
-                <p style="color: #6c757d; line-height: 1.8; margin-top: 15px;">O protocolo é importante para o acompanhamento posterior do usuário, pois permite verificar a situação da solicitação na fila de espera, facilitando o monitoramento e a continuidade do cuidado.</p>
+                <p style="color: #6c757d; line-height:  1.8; margin-top: 15px;">O protocolo é importante para o acompanhamento posterior do usuário, pois permite verificar a situação da solicitação na fila de espera, facilitando o monitoramento e a continuidade do cuidado.</p>
             </div>
         </div>
 
@@ -1085,7 +1053,7 @@
             document.body.style.opacity = '1';
         });
 
-        // (MUDANÇA) Funcionalidade de pesquisa: busca automática por blocos (data-search-block)
+        // Pesquisa automática por blocos (data-search-block)
         (function () {
             const input = document.getElementById('searchInput');
             const clearBtn = document.getElementById('clearInlineButton');
@@ -1105,7 +1073,6 @@
             }
 
             function highlightInBlock(block, term) {
-                // Remove marks antigos apenas dentro do bloco
                 removeMarks(block);
 
                 const regex = new RegExp(escapeRegExp(term), 'gi');
@@ -1115,7 +1082,6 @@
                         if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
                         const parent = node.parentNode;
                         if (!parent) return NodeFilter.FILTER_REJECT;
-                        // Não mexer em script/style e nem dentro de links/ícones de fontawesome por segurança
                         const tag = parent.nodeName.toLowerCase();
                         if (tag === 'script' || tag === 'style') return NodeFilter.FILTER_REJECT;
                         return NodeFilter.FILTER_ACCEPT;
@@ -1158,19 +1124,15 @@
 
                 clearBtn.style.display = hasText ? 'flex' : 'none';
 
-                // Reset visual
                 allSections.forEach(sec => sec.classList.remove('search-hidden'));
                 blocks.forEach(b => b.classList.remove('search-hidden', 'search-match'));
 
-                // Se não tem termo: limpa highlights e mostra tudo
                 if (!hasText) {
                     blocks.forEach(b => removeMarks(b));
                     return;
                 }
 
-                // Filtra por blocos
                 const termLower = term.toLowerCase();
-
                 let firstVisibleBlock = null;
 
                 blocks.forEach(block => {
@@ -1190,29 +1152,24 @@
                     }
                 });
 
-                // Esconde sections que ficaram sem nenhum bloco visível
                 allSections.forEach(section => {
                     const visibleBlockInside = section.querySelector('[data-search-block]:not(.search-hidden)');
                     if (!visibleBlockInside) section.classList.add('search-hidden');
                 });
 
-                // Scroll para o primeiro bloco encontrado
                 if (firstVisibleBlock) {
                     firstVisibleBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             }
 
-            // Busca automática enquanto digita
             input.addEventListener('input', applySearch);
 
-            // Limpar
             clearBtn.addEventListener('click', function () {
                 input.value = '';
                 input.focus();
                 applySearch();
             });
 
-            // ESC também limpa
             input.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     input.value = '';
