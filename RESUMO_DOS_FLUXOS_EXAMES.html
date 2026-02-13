@@ -83,63 +83,74 @@
             margin-top: 20px;
         }
 
+        /* ====== NOVA BUSCA (modelo parecido com o da imagem) ====== */
         .search-box {
             display: flex;
-            gap: 10px;
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+        }
+
+        .search-field {
+            position: relative;
+            width: min(760px, 100%);
         }
 
         .search-input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
+            width: 100%;
+            height: 46px;
+            padding: 0 44px 0 44px; /* espaço para lupa (esq) e X (dir) */
+            border: 2px solid #9C4A6F; /* borda vinho/magenta como na referência */
+            border-radius: 8px;        /* cantos moderados como na referência */
             font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
+            background: #fff;
+            outline: none;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .search-input::placeholder {
+            color: #7a7f87;
         }
 
         .search-input:focus {
-            outline: none;
+            box-shadow: 0 0 0 4px rgba(156, 74, 111, 0.12);
             border-color: #9C4A6F;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(156, 74, 111, 0.1);
         }
 
-        .search-button, .clear-button {
-            padding: 12px 20px;
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8b929a;
+            pointer-events: none;
+            font-size: 1rem;
+        }
+
+        /* Botão limpar dentro do input (aparece só quando houver texto) */
+        .clear-inline {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
             border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .search-button {
-            background: #9C4A6F;
-            color: white;
-        }
-
-        .search-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(156, 74, 111, 0.3);
-        }
-
-        .clear-button {
-            background: #f8f9fa;
+            border-radius: 8px;
+            background: #f1f3f5;
             color: #6c757d;
-            border: 2px solid #e9ecef;
+            cursor: pointer;
+            display: none;
+            transition: background 0.2s ease, transform 0.15s ease;
         }
 
-        .clear-button:hover {
+        .clear-inline:hover {
             background: #e9ecef;
-            border-color: #dee2e6;
+            transform: translateY(-50%) scale(1.03);
+        }
+
+        .clear-inline:active {
+            transform: translateY(-50%) scale(0.98);
         }
 
         .container {
@@ -510,10 +521,6 @@
                 gap: 15px;
             }
 
-            .search-box {
-                flex-direction: column;
-            }
-
             .container {
                 margin-top: 20px;
                 padding: 15px;
@@ -533,10 +540,6 @@
         @media (max-width: 480px) {
             .header-title {
                 font-size: 1.2rem;
-            }
-
-            .search-input, .search-button, .clear-button {
-                padding: 10px 15px;
             }
 
             .container {
@@ -560,16 +563,30 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- ====== BUSCA ATUALIZADA (modelo da imagem) ====== -->
     <div class="search-container">
         <div class="search-box">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Pesquisar na página...">
-            <button id="searchButton" class="search-button">
-                <i class="fas fa-search"></i> Pesquisar
-            </button>
-            <button id="clearSearchButton" class="clear-button">
-                <i class="fas fa-times"></i> Limpar
-            </button>
+            <div class="search-field">
+                <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Buscar especialidade..."
+                    autocomplete="off"
+                    aria-label="Buscar especialidade"
+                >
+                <button
+                    type="button"
+                    id="clearInlineButton"
+                    class="clear-inline"
+                    aria-label="Limpar busca"
+                    title="Limpar"
+                >
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -628,7 +645,7 @@
 
                 <h3 class="subsection-title">Mamografia</h3>
                 <p style="color: #6c757d; line-height: 1.8; margin-bottom: 15px;">Mamografia deve seguir critérios nacionais atualizados (2025).</p>
-                
+
                 <div class="success-box">
                     <p>✔ Solicitação é via SISCAN e deve indicar o prestador correto.</p>
                     <p>✔ UBS agenda rastreamento diretamente; casos de risco elevado e diagnósticos são regulados.</p>
@@ -671,7 +688,7 @@
                 </a>
 
                 <h3 class="subsection-title">Acupuntura</h3>
-                
+
                 <h4 class="sub-subsection-title">Fluxo</h4>
                 <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
                     <li>Profissional de nível superior solicita acupuntura no sistema Vivver.</li>
@@ -707,7 +724,7 @@
 
                 <h3 class="subsection-title">Infertilidade Conjugal</h3>
                 <p style="color: #6c757d; line-height: 1.8;">Considera-se infertilidade a ausência de gravidez após 1 ano de relações frequentes sem contracepção, para mulheres até 35 anos.</p>
-                
+
                 <div class="info-box" style="margin-top: 15px;">
                     <h4><i class="fas fa-info-circle"></i> A investigação deve começar antes de 1 ano nos casos de:</h4>
                     <ul>
@@ -776,7 +793,7 @@
                 </div>
 
                 <h3 class="subsection-title">Sangramento Uterino Anormal</h3>
-                
+
                 <h4 class="sub-subsection-title">Fluxo resumido</h4>
                 <div class="step-list">
                     <ol>
@@ -881,7 +898,7 @@
                 </div>
 
                 <h4 class="sub-subsection-title">Faltas e avisos de ausência</h4>
-                
+
                 <p style="color: #495057; font-weight: 600; margin: 15px 0 10px 0;">Falta à primeira consulta (reagendamento possível se justificar)</p>
                 <p style="color: #6c757d; line-height: 1.8;">Só pode reagendar se a falta ocorrer por:</p>
                 <div class="info-box" style="margin-top: 10px;">
@@ -914,9 +931,9 @@
             </div>
             <div class="section-content">
                 <h3 class="subsection-title">Psicologia, Psiquiatria, Fisioterapia, Nutrição, Assistente Social, T.O., Educador Físico, Ginecologia e Pediatria</h3>
-                
+
                 <p style="color: #6c757d; line-height: 1.8;">Para consultas com essas especialidades, o paciente deverá pegar encaminhamento com o profissional médico da Unidade Básica de Saúde, o mesmo será avaliado pelos profissionais da Emulti e será agendado em agenda interna dentro da unidade.</p>
-              </div>
+            </div>
         </div>
 
         <div class="content-section" data-search-content>
@@ -931,7 +948,7 @@
                 </a>
 
                 <h3 class="subsection-title">Cirurgias Cardio Vascular</h3>
-                
+
                 <div class="alert-box">
                     <p>• Os municípios de Contagem e Belo Horizonte <strong>NÃO possuem atendimento eletivo especializado em Cirurgia Vascular Cardiologia</strong>.</p>
                     <p style="margin-top: 10px;">• Por esse motivo, toda solicitação deve ser feita por <strong>AIH</strong>, preenchida em formulário padrão.</p>
@@ -941,7 +958,7 @@
                 <p style="color: #6c757d; line-height: 1.8;">Médico da rede SUS Contagem ou SUS Belo Horizonte, preenchendo todos os campos de forma legível.</p>
 
                 <h4 class="sub-subsection-title">Informações obrigatórias na AIH</h4>
-                
+
                 <p style="color: #495057; font-weight: 600; margin: 15px 0 10px 0;">Dados do usuário:</p>
                 <ul style="color: #6c757d; line-height: 1.8; margin-left: 20px;">
                     <li>Nome completo</li>
@@ -1029,8 +1046,7 @@
         });
 
         const searchInput = document.getElementById('searchInput');
-        const searchButton = document.getElementById('searchButton');
-        const clearButton = document.getElementById('clearSearchButton');
+        const clearInlineButton = document.getElementById('clearInlineButton');
         const mainContainer = document.getElementById('mainContainer');
         const sections = document.querySelectorAll('[data-search-content]');
 
@@ -1039,10 +1055,16 @@
             return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
         }
 
+        // Mostrar/ocultar o botão X conforme digita
+        function updateClearButtonVisibility() {
+            const hasText = searchInput.value.trim().length > 0;
+            clearInlineButton.style.display = hasText ? 'block' : 'none';
+        }
+
         // Função para realizar a busca
         function performSearch() {
             const searchTerm = searchInput.value.trim();
-            
+
             if (searchTerm === '') {
                 // Se a busca estiver vazia, mostra todas as seções
                 sections.forEach(section => {
@@ -1062,7 +1084,7 @@
             // Filtra as seções
             sections.forEach(section => {
                 const sectionText = normalizeText(section.textContent);
-                
+
                 if (sectionText.includes(normalizedSearch)) {
                     section.classList.remove('hidden');
                     hasResults = true;
@@ -1094,26 +1116,28 @@
         // Busca ao digitar (com pequeno delay para performance)
         let searchTimeout;
         searchInput.addEventListener('input', function() {
+            updateClearButtonVisibility();
             clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(performSearch, 300);
+            searchTimeout = setTimeout(performSearch, 250);
         });
 
-        // Busca ao clicar no botão
-        searchButton.addEventListener('click', performSearch);
-
-        // Busca ao pressionar Enter
-        searchInput.addEventListener('keypress', function(e) {
+        // Busca ao pressionar Enter (mantém)
+        searchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 performSearch();
             }
         });
 
-        // Limpar busca
-        clearButton.addEventListener('click', function() {
+        // Limpar busca (botão X)
+        clearInlineButton.addEventListener('click', function() {
             searchInput.value = '';
+            updateClearButtonVisibility();
             performSearch();
             searchInput.focus();
         });
+
+        // Estado inicial do botão limpar
+        updateClearButtonVisibility();
 
         // Scroll suave para links internos
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
