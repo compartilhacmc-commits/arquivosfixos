@@ -14,11 +14,43 @@
         }
         
         .header-bg {
-            background-color: #9C4A6F;
+            background-color: #7B3B6B;
+            padding: 2rem 0;
+        }
+        
+        .header-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header-title i {
+            font-size: 2.5rem;
+        }
+        
+        .header-subtitle {
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 0.25rem;
+        }
+        
+        .header-credits {
+            font-size: 0.875rem;
+            font-weight: 300;
+            opacity: 0.9;
         }
         
         .footer-bg {
-            background-color: #9C4A6F;
+            background-color: #7B3B6B;
         }
         
         .card-hover {
@@ -51,27 +83,27 @@
             left: 0;
             width: 50px;
             height: 3px;
-            background: linear-gradient(90deg, #9C4A6F, #7d3a59);
+            background: linear-gradient(90deg, #7B3B6B, #5d2d51);
             border-radius: 2px;
         }
         
         .ubs-card {
-            border-left: 4px solid #9C4A6F;
+            border-left: 4px solid #7B3B6B;
             background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
         }
         
         .phone-link {
-            color: #9C4A6F;
+            color: #7B3B6B;
             text-decoration: none;
             transition: color 0.2s ease;
         }
         
         .phone-link:hover {
-            color: #7d3a59;
+            color: #5d2d51;
         }
         
         .icon-vinho {
-            color: #9C4A6F;
+            color: #7B3B6B;
         }
         
         @media print {
@@ -107,21 +139,21 @@
 </head>
 <body class="bg-gray-50">
     <!-- Header -->
-    <div class="header-bg text-white py-8 mb-8">
+    <div class="header-bg">
         <div class="container mx-auto px-4">
-            <div class="text-center">
-                <div class="flex justify-center items-center mb-4">
-                    <i class="fas fa-hospital-alt text-4xl mr-4"></i>
-                    <h1 class="text-4xl font-bold">Telefones das Unidades Básicas de Saúde Contagem - MG</h1>
+            <div class="header-content">
+                <div class="header-title">
+                    <i class="fas fa-phone-alt"></i>
+                    <h1>Contatos Telefônicos - Diretoria de Regulação do Acesso</h1>
                 </div>
-                <p class="text-lg opacity-80 mt-2">Guia completo das UBS organizadas por região</p>
-                <p class="footer-credits">Página Criada por Ana P. A. Silva Matr:201704/Assistente Adm. Diretoria de Regulação do Acesso</p>
+                <p class="header-subtitle">Diretoria de Regulação do Acesso</p>
+                <p class="header-credits">Página Criada por Ana P. A. Silva Matr:201704/Assistente Adm. Diretoria de Regulação do Acesso</p>
             </div>
         </div>
     </div>
 
     <!-- Navigation -->
-    <div class="container mx-auto px-4 mb-8 no-print">
+    <div class="container mx-auto px-4 mb-8 mt-8 no-print">
         <div class="bg-white rounded-lg shadow-md p-4">
             <h2 class="text-lg font-semibold mb-4 text-gray-700">
                 <i class="fas fa-map-marked-alt mr-2"></i>Navegação por Região
@@ -134,7 +166,7 @@
                 <a href="#ressaca" class="nav-link px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600">Ressaca</a>
                 <a href="#riacho" class="nav-link px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">Riacho</a>
                 <a href="#sede" class="nav-link px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Sede</a>
-                <a href="#vargem" class="nav-link px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-teal-600">Vargem das Flores</a>
+                <a href="#vargem" class="nav-link px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600">Vargem das Flores</a>
             </div>
         </div>
     </div>
@@ -976,6 +1008,4 @@
         </div>
     </footer>
 </body>
-
 </html>
-
